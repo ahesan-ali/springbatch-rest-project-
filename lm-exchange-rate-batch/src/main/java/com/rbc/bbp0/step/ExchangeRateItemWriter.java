@@ -15,12 +15,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
-@AllArgsConstructor
-@RequiredArgsConstructor
 public class ExchangeRateItemWriter implements ItemWriter<ExchangeRatesRequest> {
 
     private String fxRateApiUrl;
     private final WebClient webClient;
+
+    public ExchangeRateItemWriter(String fxRateApiUrl, WebClient webClient) {
+        this.fxRateApiUrl=fxRateApiUrl;
+        this.webClient=webClient;
+    }
 
     @Override
     public void write(List<? extends ExchangeRatesRequest> list) throws Exception {

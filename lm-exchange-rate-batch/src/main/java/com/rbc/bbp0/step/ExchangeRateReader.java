@@ -20,8 +20,6 @@ import java.util.function.Predicate;
 
 
 @Slf4j
-@RequiredArgsConstructor
-@AllArgsConstructor
 public class ExchangeRateReader implements ItemReader<ExchangeRatesRequest> {
 
     private final String fxRateApiUrl;
@@ -30,6 +28,13 @@ public class ExchangeRateReader implements ItemReader<ExchangeRatesRequest> {
 
     private final WebClient webClient;
     private boolean batchJobState = false;
+
+    public ExchangeRateReader(String fxRateApiUrl, String apiUsername, String apiPassword, WebClient webClient) {
+    this.apiPassword=apiPassword;
+    this.apiUsername=apiUsername;
+    this.fxRateApiUrl=fxRateApiUrl;
+    this.webClient=webClient;
+    }
 
     @Override
     public ExchangeRatesRequest read() throws Exception {

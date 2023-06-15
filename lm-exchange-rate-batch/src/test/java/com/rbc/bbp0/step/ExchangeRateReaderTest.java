@@ -1,7 +1,9 @@
 package com.rbc.bbp0.step;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -30,12 +32,32 @@ import java.util.ArrayList;
 import org.junit.jupiter.api.Disabled;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
+import org.springframework.batch.item.UnexpectedInputException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.web.reactive.function.client.WebClient;
 
+@ContextConfiguration(classes = {ExchangeRateReader.class, String.class})
+@ExtendWith(SpringExtension.class)
 class ExchangeRateReaderTest {
     @MockBean
+    private WebClient webClient;
+
+    @MockBean
     private ExchangeRateReader exchangeRateReader;
+
+    /**
+     * Method under test: {@link ExchangeRateReader#ExchangeRateReader(String, String, String, WebClient)}
+     */
+    @Test
+    void testConstructor() {
+        assertNull(
+                (new ExchangeRateReader("https://example.org/example", "janedoe", "iloveyou", null)).getExchangeRate());
+    }
 
     /**
      * Method under test: {@link ExchangeRateReader#read()}
@@ -46,6 +68,33 @@ class ExchangeRateReaderTest {
         when(exchangeRateReader.read()).thenReturn(exchangeRatesRequest);
         assertSame(exchangeRatesRequest, exchangeRateReader.read());
         verify(exchangeRateReader).read();
+    }
+
+    /**
+     * Method under test: {@link ExchangeRateReader#read()}
+     */
+    @Test
+    void testRead2() throws Exception {
+        //   Diffblue Cover was unable to write a Spring test,
+        //   so wrote a non-Spring test instead.
+        //   Diffblue AI was unable to find a test
+
+        assertNull((new ExchangeRateReader("https://example.org/example", "janedoe", "iloveyou", null)).read());
+    }
+
+    /**
+     * Method under test: {@link ExchangeRateReader#read()}
+     */
+    @Test
+    void testRead3() throws Exception {
+        //   Diffblue Cover was unable to write a Spring test,
+        //   so wrote a non-Spring test instead.
+        //   Diffblue AI was unable to find a test
+
+        WebClient webClient = mock(WebClient.class);
+        Mockito.<WebClient.RequestHeadersUriSpec<?>>when(webClient.get()).thenReturn(null);
+        assertNull((new ExchangeRateReader("https://example.org/example", "janedoe", "iloveyou", webClient)).read());
+        verify(webClient).get();
     }
 
     /**
@@ -60,6 +109,27 @@ class ExchangeRateReaderTest {
     }
 
     /**
+     * Method under test: {@link ExchangeRateReader#fetchexchangerateDataFromApi()}
+     */
+    @Test
+    void testFetchexchangerateDataFromApi2() {
+        Mockito.<WebClient.RequestHeadersUriSpec<?>>when(webClient.get()).thenReturn(null);
+        assertNull(exchangeRateReader.fetchexchangerateDataFromApi());
+        verify(webClient).get();
+    }
+
+    /**
+     * Method under test: {@link ExchangeRateReader#fetchexchangerateDataFromApi()}
+     */
+    @Test
+    void testFetchexchangerateDataFromApi3() {
+        Mockito.<WebClient.RequestHeadersUriSpec<?>>when(webClient.get())
+                .thenThrow(new UnexpectedInputException("An error occurred"));
+        assertNull(exchangeRateReader.fetchexchangerateDataFromApi());
+        verify(webClient).get();
+    }
+
+    /**
      * Method under test: {@link ExchangeRateReader#getExchangeRate()}
      */
     @Test
@@ -68,6 +138,27 @@ class ExchangeRateReaderTest {
         when(exchangeRateReader.getExchangeRate()).thenReturn(exchangeRatesRequest);
         assertSame(exchangeRatesRequest, exchangeRateReader.getExchangeRate());
         verify(exchangeRateReader).getExchangeRate();
+    }
+
+    /**
+     * Method under test: {@link ExchangeRateReader#getExchangeRate()}
+     */
+    @Test
+    void testGetExchangeRate2() {
+        Mockito.<WebClient.RequestHeadersUriSpec<?>>when(webClient.get()).thenReturn(null);
+        assertNull(exchangeRateReader.getExchangeRate());
+        verify(webClient).get();
+    }
+
+    /**
+     * Method under test: {@link ExchangeRateReader#getExchangeRate()}
+     */
+    @Test
+    void testGetExchangeRate3() {
+        Mockito.<WebClient.RequestHeadersUriSpec<?>>when(webClient.get())
+                .thenThrow(new UnexpectedInputException("An error occurred"));
+        assertNull(exchangeRateReader.getExchangeRate());
+        verify(webClient).get();
     }
 
     /**
@@ -272,6 +363,35 @@ class ExchangeRateReaderTest {
     }
 
     /**
+     * Method under test: {@link ExchangeRateReader#getExchangeRateResponse()}
+     */
+    @Test
+    @Disabled("TODO: Complete this test")
+    void testGetExchangeRateResponse2() {
+        // TODO: Complete this test.
+        //   Reason: R013 No inputs found that don't throw a trivial exception.
+        //   Diffblue Cover tried to run the arrange/act section, but the method under
+        //   test threw
+        //   java.lang.NullPointerException: Cannot invoke "org.springframework.web.reactive.function.client.WebClient$RequestHeadersUriSpec.uri(String, Object[])" because the return value of "org.springframework.web.reactive.function.client.WebClient.get()" is null
+        //       at com.rbc.bbp0.step.ExchangeRateReader.getExchangeRateResponse(ExchangeRateReader.java:84)
+        //   See https://diff.blue/R013 to resolve this issue.
+
+        Mockito.<WebClient.RequestHeadersUriSpec<?>>when(webClient.get()).thenReturn(null);
+        exchangeRateReader.getExchangeRateResponse();
+    }
+
+    /**
+     * Method under test: {@link ExchangeRateReader#getExchangeRateResponse()}
+     */
+    @Test
+    void testGetExchangeRateResponse3() {
+        Mockito.<WebClient.RequestHeadersUriSpec<?>>when(webClient.get())
+                .thenThrow(new UnexpectedInputException("An error occurred"));
+        assertThrows(UnexpectedInputException.class, () -> exchangeRateReader.getExchangeRateResponse());
+        verify(webClient).get();
+    }
+
+    /**
      * Method under test: {@link ExchangeRateReader#getExchangeRatesRequest(Root)}
      */
     @Test
@@ -294,6 +414,296 @@ class ExchangeRateReaderTest {
         root.wsImsoArea = wsimsoarea;
         assertSame(exchangeRatesRequest, exchangeRateReader.getExchangeRatesRequest(root));
         verify(exchangeRateReader).getExchangeRatesRequest(Mockito.<Root>any());
+    }
+
+    /**
+     * Method under test: {@link ExchangeRateReader#getExchangeRatesRequest(Root)}
+     */
+    @Test
+    @Disabled("TODO: Complete this test")
+    void testGetExchangeRatesRequest2() {
+        // TODO: Complete this test.
+        //   Reason: R013 No inputs found that don't throw a trivial exception.
+        //   Diffblue Cover tried to run the arrange/act section, but the method under
+        //   test threw
+        //   java.lang.IndexOutOfBoundsException: Index 0 out of bounds for length 0
+        //       at jdk.internal.util.Preconditions.outOfBounds(Preconditions.java:64)
+        //       at jdk.internal.util.Preconditions.outOfBoundsCheckIndex(Preconditions.java:70)
+        //       at jdk.internal.util.Preconditions.checkIndex(Preconditions.java:266)
+        //       at java.util.Objects.checkIndex(Objects.java:361)
+        //       at java.util.ArrayList.get(ArrayList.java:427)
+        //       at com.rbc.bbp0.step.ExchangeRateReader.getDateTime(ExchangeRateReader.java:120)
+        //       at com.rbc.bbp0.step.ExchangeRateReader.getExchangeRatesRequest(ExchangeRateReader.java:101)
+        //   See https://diff.blue/R013 to resolve this issue.
+
+        PvrFxRateReturnArea pvrFxRateReturnArea = new PvrFxRateReturnArea();
+        pvrFxRateReturnArea.rateReturnDetailArray = new ArrayList<>();
+        PvrFxReqReturnCodeArea pvrFxReqReturnCodeArea = new PvrFxReqReturnCodeArea();
+        pvrFxReqReturnCodeArea.errorWarnFlag = -1;
+        pvrFxReqReturnCodeArea.requestReturnCode = 1;
+        PvrFxReturnArea pvrFxReturnArea = new PvrFxReturnArea();
+        pvrFxReturnArea.pvrFxRateReturnArea = pvrFxRateReturnArea;
+        pvrFxReturnArea.pvrFxReqReturnCodeArea = pvrFxReqReturnCodeArea;
+        PvrFxInterfaceArea pvrFxInterfaceArea = new PvrFxInterfaceArea();
+        pvrFxInterfaceArea.pvrFxReturnArea = pvrFxReturnArea;
+        Wsimsoarea wsimsoarea = new Wsimsoarea();
+        wsimsoarea.pvrFxInterfaceArea = pvrFxInterfaceArea;
+        Root root = new Root();
+        root.wsImsoArea = wsimsoarea;
+        exchangeRateReader.getExchangeRatesRequest(root);
+    }
+
+    /**
+     * Method under test: {@link ExchangeRateReader#getExchangeRatesRequest(Root)}
+     */
+    @Test
+    @Disabled("TODO: Complete this test")
+    void testGetExchangeRatesRequest3() {
+        // TODO: Complete this test.
+        //   Reason: R013 No inputs found that don't throw a trivial exception.
+        //   Diffblue Cover tried to run the arrange/act section, but the method under
+        //   test threw
+        //   java.lang.IndexOutOfBoundsException: Index 0 out of bounds for length 0
+        //       at jdk.internal.util.Preconditions.outOfBounds(Preconditions.java:64)
+        //       at jdk.internal.util.Preconditions.outOfBoundsCheckIndex(Preconditions.java:70)
+        //       at jdk.internal.util.Preconditions.checkIndex(Preconditions.java:266)
+        //       at java.util.Objects.checkIndex(Objects.java:361)
+        //       at java.util.ArrayList.get(ArrayList.java:427)
+        //       at com.rbc.bbp0.step.ExchangeRateReader.getDateTime(ExchangeRateReader.java:120)
+        //       at com.rbc.bbp0.step.ExchangeRateReader.getExchangeRatesRequest(ExchangeRateReader.java:101)
+        //   See https://diff.blue/R013 to resolve this issue.
+
+        PvrFxRateReturnArea pvrFxRateReturnArea = new PvrFxRateReturnArea();
+        pvrFxRateReturnArea.rateReturnDetailArray = new ArrayList<>();
+        PvrFxReqReturnCodeArea pvrFxReqReturnCodeArea = new PvrFxReqReturnCodeArea();
+        pvrFxReqReturnCodeArea.errorWarnFlag = -1;
+        pvrFxReqReturnCodeArea.requestReturnCode = 1;
+        PvrFxReturnArea pvrFxReturnArea = new PvrFxReturnArea();
+        pvrFxReturnArea.pvrFxRateReturnArea = pvrFxRateReturnArea;
+        pvrFxReturnArea.pvrFxReqReturnCodeArea = pvrFxReqReturnCodeArea;
+        PvrFxInterfaceArea pvrFxInterfaceArea = new PvrFxInterfaceArea();
+        pvrFxInterfaceArea.pvrFxReturnArea = pvrFxReturnArea;
+        Wsimsoarea wsimsoarea = new Wsimsoarea();
+        wsimsoarea.pvrFxInterfaceArea = pvrFxInterfaceArea;
+        Root root = mock(Root.class);
+        root.wsImsoArea = wsimsoarea;
+        exchangeRateReader.getExchangeRatesRequest(root);
+    }
+
+    /**
+     * Method under test: {@link ExchangeRateReader#getExchangeRatesRequest(Root)}
+     */
+    @Test
+    void testGetExchangeRatesRequest4() {
+        AmtRangeInfo amtRangeInfo = new AmtRangeInfo();
+        amtRangeInfo.amtRange = "inside getExchangeRateData";
+        amtRangeInfo.amtRangeEffDate = "2020-03-01";
+        amtRangeInfo.amtRangeLowerFormat = 1;
+        amtRangeInfo.amtRangeLowerValue = 42;
+        amtRangeInfo.amtRangeUpperFormat = 1;
+        amtRangeInfo.amtRangeUpperValue = 42;
+        amtRangeInfo.branchLimit = 1;
+        amtRangeInfo.branchLimitFormat = 1;
+        FwdRateLastUpdTimestamp fwdRateLastUpdTimestamp = new FwdRateLastUpdTimestamp();
+        fwdRateLastUpdTimestamp.fwdRateLastUpdDate = 1;
+        fwdRateLastUpdTimestamp.fwdRateLastUpdTime = 1;
+        FwdStaleTimestamp fwdStaleTimestamp = new FwdStaleTimestamp();
+        fwdStaleTimestamp.fwdStaleDate = 1;
+        fwdStaleTimestamp.fwdStaleTime = 1;
+        RateLastUpdTimestamp rateLastUpdTimestamp = new RateLastUpdTimestamp();
+        rateLastUpdTimestamp.rateLastUpdDate = 1L;
+        rateLastUpdTimestamp.rateLastUpdTime = 1L;
+        StaleTimestamp staleTimestamp = new StaleTimestamp();
+        staleTimestamp.staleDate = 1;
+        staleTimestamp.staleTime = 1;
+        RetrievedRateInfo retrievedRateInfo = new RetrievedRateInfo();
+        retrievedRateInfo.FwdOptionDate = 1;
+        retrievedRateInfo.FwdValueMatureDate = 42;
+        retrievedRateInfo.RetrievedRateEffDate = 1;
+        retrievedRateInfo.capMktBuFwdRateStatus = "inside getExchangeRateData";
+        retrievedRateInfo.capMktBuyFwdRate = 1;
+        retrievedRateInfo.capMktBuyFwdRateFormat = 1;
+        retrievedRateInfo.capMktBuyRate = 1;
+        retrievedRateInfo.capMktBuyRateFormat = 1;
+        retrievedRateInfo.capMktBuyRateStatus = "inside getExchangeRateData";
+        retrievedRateInfo.capMktSellFwdRate = 1;
+        retrievedRateInfo.capMktSellFwdRateFormat = 1;
+        retrievedRateInfo.capMktSellFwdRateStatus = "inside getExchangeRateData";
+        retrievedRateInfo.capMktSellRateFormat = 1;
+        retrievedRateInfo.capMktSellRateSatus = "inside getExchangeRateData";
+        retrievedRateInfo.capMktSellrate = 1;
+        retrievedRateInfo.contractEffDate = 1;
+        retrievedRateInfo.fwdAdjType = "inside getExchangeRateData";
+        retrievedRateInfo.fwdContractEffDate = 1;
+        retrievedRateInfo.fwdRateEntryDate = 1;
+        retrievedRateInfo.fwdRateEntryTime = 1;
+        retrievedRateInfo.fwdRateLastUpdTimestamp = fwdRateLastUpdTimestamp;
+        retrievedRateInfo.fwdStaleTimestamp = fwdStaleTimestamp;
+        retrievedRateInfo.linkStatus = "inside getExchangeRateData";
+        retrievedRateInfo.linkUpdDate = 1;
+        retrievedRateInfo.linkUpdTime = 1;
+        retrievedRateInfo.optionDate = 1;
+        retrievedRateInfo.pvrRateKey = "inside getExchangeRateData";
+        retrievedRateInfo.rateEntryDate = 1;
+        retrievedRateInfo.rateEntryTime = 1;
+        retrievedRateInfo.rateLastUpdTimestamp = rateLastUpdTimestamp;
+        retrievedRateInfo.rbcBuyFwdRate = 1;
+        retrievedRateInfo.rbcBuyFwdRateFormat = 1;
+        retrievedRateInfo.rbcBuyFwdRateStatus = "inside getExchangeRateData";
+        retrievedRateInfo.rbcBuyRate = 10.0d;
+        retrievedRateInfo.rbcBuyRateFormat = 1;
+        retrievedRateInfo.rbcBuyRateStatus = "inside getExchangeRateData";
+        retrievedRateInfo.rbcSellFwdRate = 1;
+        retrievedRateInfo.rbcSellFwdRateFormat = 1;
+        retrievedRateInfo.rbcSellFwdRateStatus = "inside getExchangeRateData";
+        retrievedRateInfo.rbcSellRate = 10.0d;
+        retrievedRateInfo.rbcSellRateFormat = 1;
+        retrievedRateInfo.rbcSellRateStatus = "inside getExchangeRateData";
+        retrievedRateInfo.reciprocalFlag = "inside getExchangeRateData";
+        retrievedRateInfo.retrivedFwdRateEffDate = 1;
+        retrievedRateInfo.staleTimestamp = staleTimestamp;
+        retrievedRateInfo.valueMatureDate = 42;
+        RateReturnDetail rateReturnDetail = new RateReturnDetail();
+        rateReturnDetail.amtRangeInfo = amtRangeInfo;
+        rateReturnDetail.indirectQuoteFlag = "inside getExchangeRateData";
+        rateReturnDetail.intRateBasis = "inside getExchangeRateData";
+        rateReturnDetail.quotationUnit = "inside getExchangeRateData";
+        rateReturnDetail.retrievedRateInfo = retrievedRateInfo;
+        RateReturnDetailArray rateReturnDetailArray = new RateReturnDetailArray();
+        rateReturnDetailArray.rateReturnCode = 1;
+        rateReturnDetailArray.rateReturnDesc = "inside getExchangeRateData";
+        rateReturnDetailArray.rateReturnDetail = rateReturnDetail;
+
+        ArrayList<RateReturnDetailArray> rateReturnDetailArrayList = new ArrayList<>();
+        rateReturnDetailArrayList.add(rateReturnDetailArray);
+        PvrFxRateReturnArea pvrFxRateReturnArea = new PvrFxRateReturnArea();
+        pvrFxRateReturnArea.rateReturnDetailArray = rateReturnDetailArrayList;
+        PvrFxReqReturnCodeArea pvrFxReqReturnCodeArea = new PvrFxReqReturnCodeArea();
+        pvrFxReqReturnCodeArea.errorWarnFlag = -1;
+        pvrFxReqReturnCodeArea.requestReturnCode = 1;
+        PvrFxReturnArea pvrFxReturnArea = new PvrFxReturnArea();
+        pvrFxReturnArea.pvrFxRateReturnArea = pvrFxRateReturnArea;
+        pvrFxReturnArea.pvrFxReqReturnCodeArea = pvrFxReqReturnCodeArea;
+        PvrFxInterfaceArea pvrFxInterfaceArea = new PvrFxInterfaceArea();
+        pvrFxInterfaceArea.pvrFxReturnArea = pvrFxReturnArea;
+        Wsimsoarea wsimsoarea = new Wsimsoarea();
+        wsimsoarea.pvrFxInterfaceArea = pvrFxInterfaceArea;
+        Root root = new Root();
+        root.wsImsoArea = wsimsoarea;
+        ExchangeRatesRequest actualExchangeRatesRequest = exchangeRateReader.getExchangeRatesRequest(root);
+        assertEquals(10.0d, actualExchangeRatesRequest.getBidRate().doubleValue());
+        assertEquals(10.0d, actualExchangeRatesRequest.getOfferRate().doubleValue());
+        assertNull(actualExchangeRatesRequest.getLstUpdateTime());
+        assertEquals("CADTOUSD", actualExchangeRatesRequest.getExchangeRateCard());
+        assertEquals("CADUSD", actualExchangeRatesRequest.getCurrencyPairId());
+    }
+
+    /**
+     * Method under test: {@link ExchangeRateReader#getExchangeRatesRequest(Root)}
+     */
+    @Test
+    void testGetExchangeRatesRequest5() {
+        AmtRangeInfo amtRangeInfo = new AmtRangeInfo();
+        amtRangeInfo.amtRange = "inside getExchangeRateData";
+        amtRangeInfo.amtRangeEffDate = "2020-03-01";
+        amtRangeInfo.amtRangeLowerFormat = 1;
+        amtRangeInfo.amtRangeLowerValue = 42;
+        amtRangeInfo.amtRangeUpperFormat = 1;
+        amtRangeInfo.amtRangeUpperValue = 42;
+        amtRangeInfo.branchLimit = 1;
+        amtRangeInfo.branchLimitFormat = 1;
+        FwdRateLastUpdTimestamp fwdRateLastUpdTimestamp = new FwdRateLastUpdTimestamp();
+        fwdRateLastUpdTimestamp.fwdRateLastUpdDate = 1;
+        fwdRateLastUpdTimestamp.fwdRateLastUpdTime = 1;
+        FwdStaleTimestamp fwdStaleTimestamp = new FwdStaleTimestamp();
+        fwdStaleTimestamp.fwdStaleDate = 1;
+        fwdStaleTimestamp.fwdStaleTime = 1;
+        RateLastUpdTimestamp rateLastUpdTimestamp = new RateLastUpdTimestamp();
+        rateLastUpdTimestamp.rateLastUpdDate = Long.MAX_VALUE;
+        rateLastUpdTimestamp.rateLastUpdTime = 1L;
+        StaleTimestamp staleTimestamp = new StaleTimestamp();
+        staleTimestamp.staleDate = 1;
+        staleTimestamp.staleTime = 1;
+        RetrievedRateInfo retrievedRateInfo = new RetrievedRateInfo();
+        retrievedRateInfo.FwdOptionDate = 1;
+        retrievedRateInfo.FwdValueMatureDate = 42;
+        retrievedRateInfo.RetrievedRateEffDate = 1;
+        retrievedRateInfo.capMktBuFwdRateStatus = "inside getExchangeRateData";
+        retrievedRateInfo.capMktBuyFwdRate = 1;
+        retrievedRateInfo.capMktBuyFwdRateFormat = 1;
+        retrievedRateInfo.capMktBuyRate = 1;
+        retrievedRateInfo.capMktBuyRateFormat = 1;
+        retrievedRateInfo.capMktBuyRateStatus = "inside getExchangeRateData";
+        retrievedRateInfo.capMktSellFwdRate = 1;
+        retrievedRateInfo.capMktSellFwdRateFormat = 1;
+        retrievedRateInfo.capMktSellFwdRateStatus = "inside getExchangeRateData";
+        retrievedRateInfo.capMktSellRateFormat = 1;
+        retrievedRateInfo.capMktSellRateSatus = "inside getExchangeRateData";
+        retrievedRateInfo.capMktSellrate = 1;
+        retrievedRateInfo.contractEffDate = 1;
+        retrievedRateInfo.fwdAdjType = "inside getExchangeRateData";
+        retrievedRateInfo.fwdContractEffDate = 1;
+        retrievedRateInfo.fwdRateEntryDate = 1;
+        retrievedRateInfo.fwdRateEntryTime = 1;
+        retrievedRateInfo.fwdRateLastUpdTimestamp = fwdRateLastUpdTimestamp;
+        retrievedRateInfo.fwdStaleTimestamp = fwdStaleTimestamp;
+        retrievedRateInfo.linkStatus = "inside getExchangeRateData";
+        retrievedRateInfo.linkUpdDate = 1;
+        retrievedRateInfo.linkUpdTime = 1;
+        retrievedRateInfo.optionDate = 1;
+        retrievedRateInfo.pvrRateKey = "inside getExchangeRateData";
+        retrievedRateInfo.rateEntryDate = 1;
+        retrievedRateInfo.rateEntryTime = 1;
+        retrievedRateInfo.rateLastUpdTimestamp = rateLastUpdTimestamp;
+        retrievedRateInfo.rbcBuyFwdRate = 1;
+        retrievedRateInfo.rbcBuyFwdRateFormat = 1;
+        retrievedRateInfo.rbcBuyFwdRateStatus = "inside getExchangeRateData";
+        retrievedRateInfo.rbcBuyRate = 10.0d;
+        retrievedRateInfo.rbcBuyRateFormat = 1;
+        retrievedRateInfo.rbcBuyRateStatus = "inside getExchangeRateData";
+        retrievedRateInfo.rbcSellFwdRate = 1;
+        retrievedRateInfo.rbcSellFwdRateFormat = 1;
+        retrievedRateInfo.rbcSellFwdRateStatus = "inside getExchangeRateData";
+        retrievedRateInfo.rbcSellRate = 10.0d;
+        retrievedRateInfo.rbcSellRateFormat = 1;
+        retrievedRateInfo.rbcSellRateStatus = "inside getExchangeRateData";
+        retrievedRateInfo.reciprocalFlag = "inside getExchangeRateData";
+        retrievedRateInfo.retrivedFwdRateEffDate = 1;
+        retrievedRateInfo.staleTimestamp = staleTimestamp;
+        retrievedRateInfo.valueMatureDate = 42;
+        RateReturnDetail rateReturnDetail = new RateReturnDetail();
+        rateReturnDetail.amtRangeInfo = amtRangeInfo;
+        rateReturnDetail.indirectQuoteFlag = "inside getExchangeRateData";
+        rateReturnDetail.intRateBasis = "inside getExchangeRateData";
+        rateReturnDetail.quotationUnit = "inside getExchangeRateData";
+        rateReturnDetail.retrievedRateInfo = retrievedRateInfo;
+        RateReturnDetailArray rateReturnDetailArray = new RateReturnDetailArray();
+        rateReturnDetailArray.rateReturnCode = 1;
+        rateReturnDetailArray.rateReturnDesc = "inside getExchangeRateData";
+        rateReturnDetailArray.rateReturnDetail = rateReturnDetail;
+
+        ArrayList<RateReturnDetailArray> rateReturnDetailArrayList = new ArrayList<>();
+        rateReturnDetailArrayList.add(rateReturnDetailArray);
+        PvrFxRateReturnArea pvrFxRateReturnArea = new PvrFxRateReturnArea();
+        pvrFxRateReturnArea.rateReturnDetailArray = rateReturnDetailArrayList;
+        PvrFxReqReturnCodeArea pvrFxReqReturnCodeArea = new PvrFxReqReturnCodeArea();
+        pvrFxReqReturnCodeArea.errorWarnFlag = -1;
+        pvrFxReqReturnCodeArea.requestReturnCode = 1;
+        PvrFxReturnArea pvrFxReturnArea = new PvrFxReturnArea();
+        pvrFxReturnArea.pvrFxRateReturnArea = pvrFxRateReturnArea;
+        pvrFxReturnArea.pvrFxReqReturnCodeArea = pvrFxReqReturnCodeArea;
+        PvrFxInterfaceArea pvrFxInterfaceArea = new PvrFxInterfaceArea();
+        pvrFxInterfaceArea.pvrFxReturnArea = pvrFxReturnArea;
+        Wsimsoarea wsimsoarea = new Wsimsoarea();
+        wsimsoarea.pvrFxInterfaceArea = pvrFxInterfaceArea;
+        Root root = new Root();
+        root.wsImsoArea = wsimsoarea;
+        ExchangeRatesRequest actualExchangeRatesRequest = exchangeRateReader.getExchangeRatesRequest(root);
+        assertEquals(10.0d, actualExchangeRatesRequest.getBidRate().doubleValue());
+        assertEquals(10.0d, actualExchangeRatesRequest.getOfferRate().doubleValue());
+        assertEquals("9227-07-28T07:32:51Z", actualExchangeRatesRequest.getLstUpdateTime());
+        assertEquals("CADTOUSD", actualExchangeRatesRequest.getExchangeRateCard());
+        assertEquals("CADUSD", actualExchangeRatesRequest.getCurrencyPairId());
     }
 
     /**
@@ -496,6 +906,181 @@ class ExchangeRateReaderTest {
     }
 
     /**
+     * Method under test: {@link ExchangeRateReader#getSellRate(Root)}
+     */
+    @Test
+    @Disabled("TODO: Complete this test")
+    void testGetSellRate2() {
+        // TODO: Complete this test.
+        //   Reason: R013 No inputs found that don't throw a trivial exception.
+        //   Diffblue Cover tried to run the arrange/act section, but the method under
+        //   test threw
+        //   java.lang.IndexOutOfBoundsException: Index 0 out of bounds for length 0
+        //       at jdk.internal.util.Preconditions.outOfBounds(Preconditions.java:64)
+        //       at jdk.internal.util.Preconditions.outOfBoundsCheckIndex(Preconditions.java:70)
+        //       at jdk.internal.util.Preconditions.checkIndex(Preconditions.java:266)
+        //       at java.util.Objects.checkIndex(Objects.java:361)
+        //       at java.util.ArrayList.get(ArrayList.java:427)
+        //       at com.rbc.bbp0.step.ExchangeRateReader.getSellRate(ExchangeRateReader.java:125)
+        //   See https://diff.blue/R013 to resolve this issue.
+
+        PvrFxRateReturnArea pvrFxRateReturnArea = new PvrFxRateReturnArea();
+        pvrFxRateReturnArea.rateReturnDetailArray = new ArrayList<>();
+        PvrFxReqReturnCodeArea pvrFxReqReturnCodeArea = new PvrFxReqReturnCodeArea();
+        pvrFxReqReturnCodeArea.errorWarnFlag = -1;
+        pvrFxReqReturnCodeArea.requestReturnCode = 1;
+        PvrFxReturnArea pvrFxReturnArea = new PvrFxReturnArea();
+        pvrFxReturnArea.pvrFxRateReturnArea = pvrFxRateReturnArea;
+        pvrFxReturnArea.pvrFxReqReturnCodeArea = pvrFxReqReturnCodeArea;
+        PvrFxInterfaceArea pvrFxInterfaceArea = new PvrFxInterfaceArea();
+        pvrFxInterfaceArea.pvrFxReturnArea = pvrFxReturnArea;
+        Wsimsoarea wsimsoarea = new Wsimsoarea();
+        wsimsoarea.pvrFxInterfaceArea = pvrFxInterfaceArea;
+        Root root = new Root();
+        root.wsImsoArea = wsimsoarea;
+        exchangeRateReader.getSellRate(root);
+    }
+
+    /**
+     * Method under test: {@link ExchangeRateReader#getSellRate(Root)}
+     */
+    @Test
+    @Disabled("TODO: Complete this test")
+    void testGetSellRate3() {
+        // TODO: Complete this test.
+        //   Reason: R013 No inputs found that don't throw a trivial exception.
+        //   Diffblue Cover tried to run the arrange/act section, but the method under
+        //   test threw
+        //   java.lang.IndexOutOfBoundsException: Index 0 out of bounds for length 0
+        //       at jdk.internal.util.Preconditions.outOfBounds(Preconditions.java:64)
+        //       at jdk.internal.util.Preconditions.outOfBoundsCheckIndex(Preconditions.java:70)
+        //       at jdk.internal.util.Preconditions.checkIndex(Preconditions.java:266)
+        //       at java.util.Objects.checkIndex(Objects.java:361)
+        //       at java.util.ArrayList.get(ArrayList.java:427)
+        //       at com.rbc.bbp0.step.ExchangeRateReader.getSellRate(ExchangeRateReader.java:125)
+        //   See https://diff.blue/R013 to resolve this issue.
+
+        PvrFxRateReturnArea pvrFxRateReturnArea = new PvrFxRateReturnArea();
+        pvrFxRateReturnArea.rateReturnDetailArray = new ArrayList<>();
+        PvrFxReqReturnCodeArea pvrFxReqReturnCodeArea = new PvrFxReqReturnCodeArea();
+        pvrFxReqReturnCodeArea.errorWarnFlag = -1;
+        pvrFxReqReturnCodeArea.requestReturnCode = 1;
+        PvrFxReturnArea pvrFxReturnArea = new PvrFxReturnArea();
+        pvrFxReturnArea.pvrFxRateReturnArea = pvrFxRateReturnArea;
+        pvrFxReturnArea.pvrFxReqReturnCodeArea = pvrFxReqReturnCodeArea;
+        PvrFxInterfaceArea pvrFxInterfaceArea = new PvrFxInterfaceArea();
+        pvrFxInterfaceArea.pvrFxReturnArea = pvrFxReturnArea;
+        Wsimsoarea wsimsoarea = new Wsimsoarea();
+        wsimsoarea.pvrFxInterfaceArea = pvrFxInterfaceArea;
+        Root root = mock(Root.class);
+        root.wsImsoArea = wsimsoarea;
+        exchangeRateReader.getSellRate(root);
+    }
+
+    /**
+     * Method under test: {@link ExchangeRateReader#getSellRate(Root)}
+     */
+    @Test
+    void testGetSellRate4() {
+        AmtRangeInfo amtRangeInfo = new AmtRangeInfo();
+        amtRangeInfo.amtRange = "Amt Range";
+        amtRangeInfo.amtRangeEffDate = "2020-03-01";
+        amtRangeInfo.amtRangeLowerFormat = 1;
+        amtRangeInfo.amtRangeLowerValue = 42;
+        amtRangeInfo.amtRangeUpperFormat = 1;
+        amtRangeInfo.amtRangeUpperValue = 42;
+        amtRangeInfo.branchLimit = 1;
+        amtRangeInfo.branchLimitFormat = 1;
+        FwdRateLastUpdTimestamp fwdRateLastUpdTimestamp = new FwdRateLastUpdTimestamp();
+        fwdRateLastUpdTimestamp.fwdRateLastUpdDate = 1;
+        fwdRateLastUpdTimestamp.fwdRateLastUpdTime = 1;
+        FwdStaleTimestamp fwdStaleTimestamp = new FwdStaleTimestamp();
+        fwdStaleTimestamp.fwdStaleDate = 1;
+        fwdStaleTimestamp.fwdStaleTime = 1;
+        RateLastUpdTimestamp rateLastUpdTimestamp = new RateLastUpdTimestamp();
+        rateLastUpdTimestamp.rateLastUpdDate = 1L;
+        rateLastUpdTimestamp.rateLastUpdTime = 1L;
+        StaleTimestamp staleTimestamp = new StaleTimestamp();
+        staleTimestamp.staleDate = 1;
+        staleTimestamp.staleTime = 1;
+        RetrievedRateInfo retrievedRateInfo = new RetrievedRateInfo();
+        retrievedRateInfo.FwdOptionDate = 1;
+        retrievedRateInfo.FwdValueMatureDate = 42;
+        retrievedRateInfo.RetrievedRateEffDate = 1;
+        retrievedRateInfo.capMktBuFwdRateStatus = "Cap Mkt Bu Fwd Rate Status";
+        retrievedRateInfo.capMktBuyFwdRate = 1;
+        retrievedRateInfo.capMktBuyFwdRateFormat = 1;
+        retrievedRateInfo.capMktBuyRate = 1;
+        retrievedRateInfo.capMktBuyRateFormat = 1;
+        retrievedRateInfo.capMktBuyRateStatus = "Cap Mkt Buy Rate Status";
+        retrievedRateInfo.capMktSellFwdRate = 1;
+        retrievedRateInfo.capMktSellFwdRateFormat = 1;
+        retrievedRateInfo.capMktSellFwdRateStatus = "Cap Mkt Sell Fwd Rate Status";
+        retrievedRateInfo.capMktSellRateFormat = 1;
+        retrievedRateInfo.capMktSellRateSatus = "Cap Mkt Sell Rate Satus";
+        retrievedRateInfo.capMktSellrate = 1;
+        retrievedRateInfo.contractEffDate = 1;
+        retrievedRateInfo.fwdAdjType = "Fwd Adj Type";
+        retrievedRateInfo.fwdContractEffDate = 1;
+        retrievedRateInfo.fwdRateEntryDate = 1;
+        retrievedRateInfo.fwdRateEntryTime = 1;
+        retrievedRateInfo.fwdRateLastUpdTimestamp = fwdRateLastUpdTimestamp;
+        retrievedRateInfo.fwdStaleTimestamp = fwdStaleTimestamp;
+        retrievedRateInfo.linkStatus = "Link Status";
+        retrievedRateInfo.linkUpdDate = 1;
+        retrievedRateInfo.linkUpdTime = 1;
+        retrievedRateInfo.optionDate = 1;
+        retrievedRateInfo.pvrRateKey = "Pvr Rate Key";
+        retrievedRateInfo.rateEntryDate = 1;
+        retrievedRateInfo.rateEntryTime = 1;
+        retrievedRateInfo.rateLastUpdTimestamp = rateLastUpdTimestamp;
+        retrievedRateInfo.rbcBuyFwdRate = 1;
+        retrievedRateInfo.rbcBuyFwdRateFormat = 1;
+        retrievedRateInfo.rbcBuyFwdRateStatus = "Rbc Buy Fwd Rate Status";
+        retrievedRateInfo.rbcBuyRate = 10.0d;
+        retrievedRateInfo.rbcBuyRateFormat = 1;
+        retrievedRateInfo.rbcBuyRateStatus = "Rbc Buy Rate Status";
+        retrievedRateInfo.rbcSellFwdRate = 1;
+        retrievedRateInfo.rbcSellFwdRateFormat = 1;
+        retrievedRateInfo.rbcSellFwdRateStatus = "Rbc Sell Fwd Rate Status";
+        retrievedRateInfo.rbcSellRate = 10.0d;
+        retrievedRateInfo.rbcSellRateFormat = 1;
+        retrievedRateInfo.rbcSellRateStatus = "Rbc Sell Rate Status";
+        retrievedRateInfo.reciprocalFlag = "Reciprocal Flag";
+        retrievedRateInfo.retrivedFwdRateEffDate = 1;
+        retrievedRateInfo.staleTimestamp = staleTimestamp;
+        retrievedRateInfo.valueMatureDate = 42;
+        RateReturnDetail rateReturnDetail = new RateReturnDetail();
+        rateReturnDetail.amtRangeInfo = amtRangeInfo;
+        rateReturnDetail.indirectQuoteFlag = "Indirect Quote Flag";
+        rateReturnDetail.intRateBasis = "Int Rate Basis";
+        rateReturnDetail.quotationUnit = "Quotation Unit";
+        rateReturnDetail.retrievedRateInfo = retrievedRateInfo;
+        RateReturnDetailArray rateReturnDetailArray = new RateReturnDetailArray();
+        rateReturnDetailArray.rateReturnCode = 1;
+        rateReturnDetailArray.rateReturnDesc = "Rate Return Desc";
+        rateReturnDetailArray.rateReturnDetail = rateReturnDetail;
+
+        ArrayList<RateReturnDetailArray> rateReturnDetailArrayList = new ArrayList<>();
+        rateReturnDetailArrayList.add(rateReturnDetailArray);
+        PvrFxRateReturnArea pvrFxRateReturnArea = new PvrFxRateReturnArea();
+        pvrFxRateReturnArea.rateReturnDetailArray = rateReturnDetailArrayList;
+        PvrFxReqReturnCodeArea pvrFxReqReturnCodeArea = new PvrFxReqReturnCodeArea();
+        pvrFxReqReturnCodeArea.errorWarnFlag = -1;
+        pvrFxReqReturnCodeArea.requestReturnCode = 1;
+        PvrFxReturnArea pvrFxReturnArea = new PvrFxReturnArea();
+        pvrFxReturnArea.pvrFxRateReturnArea = pvrFxRateReturnArea;
+        pvrFxReturnArea.pvrFxReqReturnCodeArea = pvrFxReqReturnCodeArea;
+        PvrFxInterfaceArea pvrFxInterfaceArea = new PvrFxInterfaceArea();
+        pvrFxInterfaceArea.pvrFxReturnArea = pvrFxReturnArea;
+        Wsimsoarea wsimsoarea = new Wsimsoarea();
+        wsimsoarea.pvrFxInterfaceArea = pvrFxInterfaceArea;
+        Root root = new Root();
+        root.wsImsoArea = wsimsoarea;
+        assertEquals(10.0d, exchangeRateReader.getSellRate(root).doubleValue());
+    }
+
+    /**
      * Method under test: {@link ExchangeRateReader#getBuyRate(Root)}
      */
     @Test
@@ -517,6 +1102,181 @@ class ExchangeRateReaderTest {
         root.wsImsoArea = wsimsoarea;
         assertEquals(10.0d, exchangeRateReader.getBuyRate(root).doubleValue());
         verify(exchangeRateReader).getBuyRate(Mockito.<Root>any());
+    }
+
+    /**
+     * Method under test: {@link ExchangeRateReader#getBuyRate(Root)}
+     */
+    @Test
+    @Disabled("TODO: Complete this test")
+    void testGetBuyRate2() {
+        // TODO: Complete this test.
+        //   Reason: R013 No inputs found that don't throw a trivial exception.
+        //   Diffblue Cover tried to run the arrange/act section, but the method under
+        //   test threw
+        //   java.lang.IndexOutOfBoundsException: Index 0 out of bounds for length 0
+        //       at jdk.internal.util.Preconditions.outOfBounds(Preconditions.java:64)
+        //       at jdk.internal.util.Preconditions.outOfBoundsCheckIndex(Preconditions.java:70)
+        //       at jdk.internal.util.Preconditions.checkIndex(Preconditions.java:266)
+        //       at java.util.Objects.checkIndex(Objects.java:361)
+        //       at java.util.ArrayList.get(ArrayList.java:427)
+        //       at com.rbc.bbp0.step.ExchangeRateReader.getBuyRate(ExchangeRateReader.java:129)
+        //   See https://diff.blue/R013 to resolve this issue.
+
+        PvrFxRateReturnArea pvrFxRateReturnArea = new PvrFxRateReturnArea();
+        pvrFxRateReturnArea.rateReturnDetailArray = new ArrayList<>();
+        PvrFxReqReturnCodeArea pvrFxReqReturnCodeArea = new PvrFxReqReturnCodeArea();
+        pvrFxReqReturnCodeArea.errorWarnFlag = -1;
+        pvrFxReqReturnCodeArea.requestReturnCode = 1;
+        PvrFxReturnArea pvrFxReturnArea = new PvrFxReturnArea();
+        pvrFxReturnArea.pvrFxRateReturnArea = pvrFxRateReturnArea;
+        pvrFxReturnArea.pvrFxReqReturnCodeArea = pvrFxReqReturnCodeArea;
+        PvrFxInterfaceArea pvrFxInterfaceArea = new PvrFxInterfaceArea();
+        pvrFxInterfaceArea.pvrFxReturnArea = pvrFxReturnArea;
+        Wsimsoarea wsimsoarea = new Wsimsoarea();
+        wsimsoarea.pvrFxInterfaceArea = pvrFxInterfaceArea;
+        Root root = new Root();
+        root.wsImsoArea = wsimsoarea;
+        exchangeRateReader.getBuyRate(root);
+    }
+
+    /**
+     * Method under test: {@link ExchangeRateReader#getBuyRate(Root)}
+     */
+    @Test
+    @Disabled("TODO: Complete this test")
+    void testGetBuyRate3() {
+        // TODO: Complete this test.
+        //   Reason: R013 No inputs found that don't throw a trivial exception.
+        //   Diffblue Cover tried to run the arrange/act section, but the method under
+        //   test threw
+        //   java.lang.IndexOutOfBoundsException: Index 0 out of bounds for length 0
+        //       at jdk.internal.util.Preconditions.outOfBounds(Preconditions.java:64)
+        //       at jdk.internal.util.Preconditions.outOfBoundsCheckIndex(Preconditions.java:70)
+        //       at jdk.internal.util.Preconditions.checkIndex(Preconditions.java:266)
+        //       at java.util.Objects.checkIndex(Objects.java:361)
+        //       at java.util.ArrayList.get(ArrayList.java:427)
+        //       at com.rbc.bbp0.step.ExchangeRateReader.getBuyRate(ExchangeRateReader.java:129)
+        //   See https://diff.blue/R013 to resolve this issue.
+
+        PvrFxRateReturnArea pvrFxRateReturnArea = new PvrFxRateReturnArea();
+        pvrFxRateReturnArea.rateReturnDetailArray = new ArrayList<>();
+        PvrFxReqReturnCodeArea pvrFxReqReturnCodeArea = new PvrFxReqReturnCodeArea();
+        pvrFxReqReturnCodeArea.errorWarnFlag = -1;
+        pvrFxReqReturnCodeArea.requestReturnCode = 1;
+        PvrFxReturnArea pvrFxReturnArea = new PvrFxReturnArea();
+        pvrFxReturnArea.pvrFxRateReturnArea = pvrFxRateReturnArea;
+        pvrFxReturnArea.pvrFxReqReturnCodeArea = pvrFxReqReturnCodeArea;
+        PvrFxInterfaceArea pvrFxInterfaceArea = new PvrFxInterfaceArea();
+        pvrFxInterfaceArea.pvrFxReturnArea = pvrFxReturnArea;
+        Wsimsoarea wsimsoarea = new Wsimsoarea();
+        wsimsoarea.pvrFxInterfaceArea = pvrFxInterfaceArea;
+        Root root = mock(Root.class);
+        root.wsImsoArea = wsimsoarea;
+        exchangeRateReader.getBuyRate(root);
+    }
+
+    /**
+     * Method under test: {@link ExchangeRateReader#getBuyRate(Root)}
+     */
+    @Test
+    void testGetBuyRate4() {
+        AmtRangeInfo amtRangeInfo = new AmtRangeInfo();
+        amtRangeInfo.amtRange = "Amt Range";
+        amtRangeInfo.amtRangeEffDate = "2020-03-01";
+        amtRangeInfo.amtRangeLowerFormat = 1;
+        amtRangeInfo.amtRangeLowerValue = 42;
+        amtRangeInfo.amtRangeUpperFormat = 1;
+        amtRangeInfo.amtRangeUpperValue = 42;
+        amtRangeInfo.branchLimit = 1;
+        amtRangeInfo.branchLimitFormat = 1;
+        FwdRateLastUpdTimestamp fwdRateLastUpdTimestamp = new FwdRateLastUpdTimestamp();
+        fwdRateLastUpdTimestamp.fwdRateLastUpdDate = 1;
+        fwdRateLastUpdTimestamp.fwdRateLastUpdTime = 1;
+        FwdStaleTimestamp fwdStaleTimestamp = new FwdStaleTimestamp();
+        fwdStaleTimestamp.fwdStaleDate = 1;
+        fwdStaleTimestamp.fwdStaleTime = 1;
+        RateLastUpdTimestamp rateLastUpdTimestamp = new RateLastUpdTimestamp();
+        rateLastUpdTimestamp.rateLastUpdDate = 1L;
+        rateLastUpdTimestamp.rateLastUpdTime = 1L;
+        StaleTimestamp staleTimestamp = new StaleTimestamp();
+        staleTimestamp.staleDate = 1;
+        staleTimestamp.staleTime = 1;
+        RetrievedRateInfo retrievedRateInfo = new RetrievedRateInfo();
+        retrievedRateInfo.FwdOptionDate = 1;
+        retrievedRateInfo.FwdValueMatureDate = 42;
+        retrievedRateInfo.RetrievedRateEffDate = 1;
+        retrievedRateInfo.capMktBuFwdRateStatus = "Cap Mkt Bu Fwd Rate Status";
+        retrievedRateInfo.capMktBuyFwdRate = 1;
+        retrievedRateInfo.capMktBuyFwdRateFormat = 1;
+        retrievedRateInfo.capMktBuyRate = 1;
+        retrievedRateInfo.capMktBuyRateFormat = 1;
+        retrievedRateInfo.capMktBuyRateStatus = "Cap Mkt Buy Rate Status";
+        retrievedRateInfo.capMktSellFwdRate = 1;
+        retrievedRateInfo.capMktSellFwdRateFormat = 1;
+        retrievedRateInfo.capMktSellFwdRateStatus = "Cap Mkt Sell Fwd Rate Status";
+        retrievedRateInfo.capMktSellRateFormat = 1;
+        retrievedRateInfo.capMktSellRateSatus = "Cap Mkt Sell Rate Satus";
+        retrievedRateInfo.capMktSellrate = 1;
+        retrievedRateInfo.contractEffDate = 1;
+        retrievedRateInfo.fwdAdjType = "Fwd Adj Type";
+        retrievedRateInfo.fwdContractEffDate = 1;
+        retrievedRateInfo.fwdRateEntryDate = 1;
+        retrievedRateInfo.fwdRateEntryTime = 1;
+        retrievedRateInfo.fwdRateLastUpdTimestamp = fwdRateLastUpdTimestamp;
+        retrievedRateInfo.fwdStaleTimestamp = fwdStaleTimestamp;
+        retrievedRateInfo.linkStatus = "Link Status";
+        retrievedRateInfo.linkUpdDate = 1;
+        retrievedRateInfo.linkUpdTime = 1;
+        retrievedRateInfo.optionDate = 1;
+        retrievedRateInfo.pvrRateKey = "Pvr Rate Key";
+        retrievedRateInfo.rateEntryDate = 1;
+        retrievedRateInfo.rateEntryTime = 1;
+        retrievedRateInfo.rateLastUpdTimestamp = rateLastUpdTimestamp;
+        retrievedRateInfo.rbcBuyFwdRate = 1;
+        retrievedRateInfo.rbcBuyFwdRateFormat = 1;
+        retrievedRateInfo.rbcBuyFwdRateStatus = "Rbc Buy Fwd Rate Status";
+        retrievedRateInfo.rbcBuyRate = 10.0d;
+        retrievedRateInfo.rbcBuyRateFormat = 1;
+        retrievedRateInfo.rbcBuyRateStatus = "Rbc Buy Rate Status";
+        retrievedRateInfo.rbcSellFwdRate = 1;
+        retrievedRateInfo.rbcSellFwdRateFormat = 1;
+        retrievedRateInfo.rbcSellFwdRateStatus = "Rbc Sell Fwd Rate Status";
+        retrievedRateInfo.rbcSellRate = 10.0d;
+        retrievedRateInfo.rbcSellRateFormat = 1;
+        retrievedRateInfo.rbcSellRateStatus = "Rbc Sell Rate Status";
+        retrievedRateInfo.reciprocalFlag = "Reciprocal Flag";
+        retrievedRateInfo.retrivedFwdRateEffDate = 1;
+        retrievedRateInfo.staleTimestamp = staleTimestamp;
+        retrievedRateInfo.valueMatureDate = 42;
+        RateReturnDetail rateReturnDetail = new RateReturnDetail();
+        rateReturnDetail.amtRangeInfo = amtRangeInfo;
+        rateReturnDetail.indirectQuoteFlag = "Indirect Quote Flag";
+        rateReturnDetail.intRateBasis = "Int Rate Basis";
+        rateReturnDetail.quotationUnit = "Quotation Unit";
+        rateReturnDetail.retrievedRateInfo = retrievedRateInfo;
+        RateReturnDetailArray rateReturnDetailArray = new RateReturnDetailArray();
+        rateReturnDetailArray.rateReturnCode = 1;
+        rateReturnDetailArray.rateReturnDesc = "Rate Return Desc";
+        rateReturnDetailArray.rateReturnDetail = rateReturnDetail;
+
+        ArrayList<RateReturnDetailArray> rateReturnDetailArrayList = new ArrayList<>();
+        rateReturnDetailArrayList.add(rateReturnDetailArray);
+        PvrFxRateReturnArea pvrFxRateReturnArea = new PvrFxRateReturnArea();
+        pvrFxRateReturnArea.rateReturnDetailArray = rateReturnDetailArrayList;
+        PvrFxReqReturnCodeArea pvrFxReqReturnCodeArea = new PvrFxReqReturnCodeArea();
+        pvrFxReqReturnCodeArea.errorWarnFlag = -1;
+        pvrFxReqReturnCodeArea.requestReturnCode = 1;
+        PvrFxReturnArea pvrFxReturnArea = new PvrFxReturnArea();
+        pvrFxReturnArea.pvrFxRateReturnArea = pvrFxRateReturnArea;
+        pvrFxReturnArea.pvrFxReqReturnCodeArea = pvrFxReqReturnCodeArea;
+        PvrFxInterfaceArea pvrFxInterfaceArea = new PvrFxInterfaceArea();
+        pvrFxInterfaceArea.pvrFxReturnArea = pvrFxReturnArea;
+        Wsimsoarea wsimsoarea = new Wsimsoarea();
+        wsimsoarea.pvrFxInterfaceArea = pvrFxInterfaceArea;
+        Root root = new Root();
+        root.wsImsoArea = wsimsoarea;
+        assertEquals(10.0d, exchangeRateReader.getBuyRate(root).doubleValue());
     }
 }
 
