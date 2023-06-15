@@ -1,0 +1,28 @@
+app:
+  swagger:
+    title: exchange-rate
+    description: LM Exchange Rate Batch
+    version: 0.0.1-SNAPSHOT
+    basePackage: com.rbc.bbp0
+
+spring:
+  application:
+    name: lm-exchange-rate-batch
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+
+logging:
+  level:
+    com.rbc.bbp0: info
+
+rest:
+  client:
+    fxRateApi:
+    url: https://zconisto.fg.rbc.com:1143/fm00/getfxrateapi/v1
+
+client:
+  user:
+    name: bbp0
+    password: Password123

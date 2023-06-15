@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: lm-exchange-rate-batch
+    cloud:
+      config:
+        enabled: false

@@ -1,0 +1,13 @@
+{
+  "interfaceName": "EXCHANGERATE",
+  "EXCHANGE_RATE_CARD": "CADTOUSD",
+  "CURRENCY _PAIR ID": "CADUSD",
+  "EFFECTIVE_DATE": "20230418",
+  "BID_RATE": 5.4,
+  "OFFER_RATE": 5.4,
+  "MID_RATE": 5.4,
+  "LST_UPDATE_TIME": "17:00",
+  "STATUS": "O",
+  "ERROR CODE": "",
+  "ERROR _DESCRIPTION": ""
+}
