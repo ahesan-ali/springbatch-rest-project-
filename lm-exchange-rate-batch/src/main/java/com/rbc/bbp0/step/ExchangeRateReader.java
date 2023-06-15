@@ -16,6 +16,7 @@ import reactor.core.publisher.Mono;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.function.Predicate;
 
 
@@ -48,7 +49,7 @@ public class ExchangeRateReader implements ItemReader<ExchangeRatesRequest> {
 
     public ExchangeRatesRequest fetchexchangerateDataFromApi(){
         log.debug("Fetching exchange rate data from external API using url: {}", fxRateApiUrl);
-        var exchangeRate = getExchangeRate();
+        ExchangeRatesRequest exchangeRate = getExchangeRate();
         log.info("Inside Exchange rate reader: Exchange rate request");
         return exchangeRate;
     }
@@ -56,7 +57,7 @@ public class ExchangeRateReader implements ItemReader<ExchangeRatesRequest> {
     public ExchangeRatesRequest getExchangeRate() {
         Root root = null;
         ExchangeRatesRequest exchangeRatesRequest = null;
-        var objectMapper = new ObjectMapper();
+        ObjectMapper objectMapper = new ObjectMapper();
         try {
             root = getExchangeRateResponse();
             objectMapper.writer().withDefaultPrettyPrinter();
@@ -90,22 +91,19 @@ public class ExchangeRateReader implements ItemReader<ExchangeRatesRequest> {
                 log.error("Response from service is 5xx");
             }
             return Mono.error(new Exception("Service response status non 2xx"));
-        }).bodyToMono(Root.class).onErrorMap(Predicate.not(Exception.class::isInstance), throwable -> {
-            log.error("Failed to send request to service", throwable);
-            return new Exception("Service request failed");
-        }).block();
+        }).bodyToMono(Root.class).block();
         return root;
     }
     public ExchangeRatesRequest getExchangeRatesRequest(Root root) {
         log.info("inside getExchangeRateData");
-        var exchangeRatesRequest = new ExchangeRatesRequest();
+        ExchangeRatesRequest exchangeRatesRequest = new ExchangeRatesRequest();
         exchangeRatesRequest.setEffectiveDate(ExchangeRateUtility.getLocalDateTime().toLocalDate());
         String dateTime = getDateTime(root);
-        var readingFormat = new SimpleDateFormat(ApplicationConstant.ORIGINAL_STRING_FORMAT);
-        var outputFormat = new SimpleDateFormat(ApplicationConstant.DESIRED_STRING_FORMAT);
+        SimpleDateFormat readingFormat = new SimpleDateFormat(ApplicationConstant.ORIGINAL_STRING_FORMAT);
+        SimpleDateFormat outputFormat = new SimpleDateFormat(ApplicationConstant.DESIRED_STRING_FORMAT);
         String lstUpdateTime = null;
         try {
-            var lstdateTime = readingFormat.parse(dateTime);
+            Date lstdateTime = readingFormat.parse(dateTime);
             lstUpdateTime = outputFormat.format(lstdateTime);
         } catch (ParseException e) {
             log.error("Error while parsing the date time: {}", e.getMessage());
@@ -119,8 +117,8 @@ public class ExchangeRateReader implements ItemReader<ExchangeRatesRequest> {
     }
 
     public static String getDateTime(Root root){
-        var date = String.valueOf(root.wsImsoArea.pvrFxInterfaceArea.pvrFxReturnArea.pvrFxRateReturnArea.rateReturnDetailArray.get(0).rateReturnDetail.retrievedRateInfo.rateLastUpdTimestamp.rateLastUpdDate);
-        var time = String.valueOf(root.wsImsoArea.pvrFxInterfaceArea.pvrFxReturnArea.pvrFxRateReturnArea.rateReturnDetailArray.get(0).rateReturnDetail.retrievedRateInfo.rateLastUpdTimestamp.rateLastUpdTime);
+        String date = String.valueOf(root.wsImsoArea.pvrFxInterfaceArea.pvrFxReturnArea.pvrFxRateReturnArea.rateReturnDetailArray.get(0).rateReturnDetail.retrievedRateInfo.rateLastUpdTimestamp.rateLastUpdDate);
+        String time = String.valueOf(root.wsImsoArea.pvrFxInterfaceArea.pvrFxReturnArea.pvrFxRateReturnArea.rateReturnDetailArray.get(0).rateReturnDetail.retrievedRateInfo.rateLastUpdTimestamp.rateLastUpdTime);
         return date.concat(time);
     }
     public Double getSellRate(Root root) {

@@ -45,16 +45,7 @@
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>io.projectreactor</groupId>
-			<artifactId>reactor-test</artifactId>
-			<scope>test</scope>
-		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.batch</groupId>
 			<artifactId>spring-batch-test</artifactId>
@@ -75,11 +66,7 @@
 			<artifactId>reactor-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework.batch</groupId>
-			<artifactId>spring-batch-test</artifactId>
-			<scope>test</scope>
-		</dependency>
+
 		<dependency>
 			<groupId>javax.validation</groupId>
 			<artifactId>validation-api</artifactId>
@@ -105,11 +92,37 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
-					<source>11</source>
-					<target>11</target>
+					<source>1.8</source>
+					<target>1.8</target>
 				</configuration>
 			</plugin>
+			<plugin>
+			<groupId>org.jacoco</groupId>
+			<artifactId>jacoco-maven-plugin</artifactId>
+			<version>0.8.9</version>
+			<configuration>
+			<excludes>
+			<excludes>**/SpringBatchApplication*</excludes>
+			<excludes>**/*Mock*</excludes>
+			<excludes>**/generated/**</excludes>
+			<excludes>**/mapper/*Impl*</excludes>
+			<excludes>**/*Mapper*</excludes>
+			<excludes>**/*MapperImpl*</excludes>
+			<excludes>**/model**</excludes>
+			<excludes>**/dto**</excludes>
+			<excludes>**/appconfig/**</excludes>
+			<excludes>**/*Configuration*</excludes>
+			<excludes>**/*MapperImpl.*</excludes>
+			<excludes>**/aop/**</excludes>
+			<excludes>**/config/**</excludes>
+			<excludes>**/exception/**</excludes>
+		</excludes>
+
+		</configuration>
+
+		</plugin>
 		</plugins>
+
 	</build>
 
 </project>

@@ -23,6 +23,10 @@ import org.springframework.web.reactive.function.client.WebClient;
 public class ExchangeRateJobConfig {
     @Value("$(rest.client.fxRateApi.url)")
     private final String fxRateApiUrl = null;
+
+    @Value("$(rest.client.fxRateApi.postUrl)")
+    private final String exchangeRatePostApi = null;
+
     @Value("$(rest.client.fxRateApi.username)")
     private final String apiUsername = null;
     @Value("$(rest.client.fxRateApi.password)")
@@ -40,7 +44,7 @@ public class ExchangeRateJobConfig {
     }
     @Bean
     public ItemWriter<ExchangeRatesRequest> itemWriter(WebClient webClient) {
-        return new ExchangeRateItemWriter(fxRateApiUrl, webClient);
+        return new ExchangeRateItemWriter(exchangeRatePostApi, webClient);
     }
     @Bean
     public ItemProcessor<ExchangeRatesRequest, ExchangeRatesRequest> itemProcessor() {

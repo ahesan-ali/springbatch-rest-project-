@@ -12,7 +12,7 @@ import java.util.Locale;
 @AllArgsConstructor
 public class ExchangeRateUtility {
     public static LocalDateTime getLocalDateTime() {
-        var localDateTime = LocalDateTime.now();
+        LocalDateTime localDateTime = LocalDateTime.now();
         DateTimeFormatter.ofPattern(ApplicationConstant.DATE_FORMAT, Locale.ENGLISH).format(localDateTime);
         return localDateTime;
     }

@@ -35,7 +35,7 @@ public class SpringBatchApplication implements CommandLineRunner {
 
 	public JobParameters newExecution() {
 		Map<String,JobParameter> parameters= new HashMap<>();
-		var parameter = new JobParameter (new Date());
+		JobParameter parameter = new JobParameter (new Date());
 		parameters.put("currentTime",parameter);
 		return new JobParameters();
 	}

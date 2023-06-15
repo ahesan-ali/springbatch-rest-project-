@@ -21,6 +21,8 @@ rest:
   client:
     fxRateApi:
     url: https://zconisto.fg.rbc.com:1143/fm00/getfxrateapi/v1
+    postUrl: http://localhost:8080//api/exchangeRate/checkRateStatus
+
 
 client:
   user:
