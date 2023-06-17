@@ -6,6 +6,8 @@ import org.junit.Test;
 import org.junit.jupiter.api.*;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -57,6 +59,25 @@ public class ExchangeRateItemWriterTest {
         }
     }
 
+    public List<ExchangeRatesRequest> getExchangeRateList(){
+        List<ExchangeRatesRequest> list = new ArrayList<>();
+        ExchangeRatesRequest exchangeRatesRequest=getExchangeRateRequest();
+        list.add(exchangeRatesRequest);
+        return list;
+    }
+
+    public ExchangeRatesRequest getExchangeRateRequest(){
+        ExchangeRatesRequest exchangeRatesRequest=new ExchangeRatesRequest();
+        exchangeRatesRequest.setExchangeRateCard("card");
+        exchangeRatesRequest.setBidRate(45.00);
+        exchangeRatesRequest.setOfferRate(33.00);
+        exchangeRatesRequest.setEffectiveDate(LocalDate.now());
+        exchangeRatesRequest.setLstUpdateTime("23-02-2022");
+        exchangeRatesRequest.setMidRate(23.00);
+        exchangeRatesRequest.setCurrencyPairId("USD");
+        return exchangeRatesRequest;
+    }
+
     @Test
     @DisplayName("get Exchange Rate Status")
     public void getExchangeRateStatus(){
@@ -75,6 +96,8 @@ public class ExchangeRateItemWriterTest {
             Assertions.assertFalse(false);
         }
     }
+
+
 
     @Test
     @DisplayName("get Request Object")
